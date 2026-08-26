@@ -4,7 +4,7 @@ import { fabricOrderEvents } from "../data/fabric.js";
 import { gcpUnifiedOrders } from "../data/gcp.js";
 import { normalizeCognos, normalizeFabric, normalizeGcp } from "../lib/normalize.js";
 import { dedupeByOrderId } from "../lib/dedup.js";
-import { updateOrderStatus, addManualOrder } from "../lib/mutate.js";
+import { updateOrderStatus, addManualOrder, deleteOrder } from "../lib/mutate.js";
 
 const router = Router();
 
@@ -74,6 +74,23 @@ router.post("/", (req, res) => {
 
   const row = addManualOrder({ storeId, territory, dcId, skuId, casesOrdered, netValue, status, orderDate });
   res.status(201).json(row);
+});
+
+// Delete an order in place, wherever it lives.
+router.delete("/:recordId", (req, res) => {
+  const { source_system } = req.query;
+
+  if (!source_system) {
+    return res.status(400).json({ error: "source_system is required" });
+  }
+
+  const deleted = deleteOrder({ sourceSystem: source_system, recordId: req.params.recordId });
+
+  if (!deleted) {
+    return res.status(404).json({ error: "order not found" });
+  }
+
+  res.json({ ok: true });
 });
 
 export default router;

@@ -50,9 +50,9 @@ real cross-reference (e.g., a migration mapping table keyed on
 store + SKU + date, or a durable ID assigned at first ingestion), not a
 shared literal ID invented per source.
 
-## Mutations (`PATCH`/`POST /api/orders`)
+## Mutations (`PATCH`/`POST`/`DELETE /api/orders`)
 
-Two write endpoints exist for the demo/portal build:
+Three write endpoints exist for the demo/portal build:
 
 - `PATCH /api/orders/:recordId` — updates status in place, wherever the
   record actually lives (`server/src/lib/mutate.js`). Since each source
@@ -65,9 +65,11 @@ Two write endpoints exist for the demo/portal build:
   is both the canonical schema and the highest dedup priority — a portal
   user adding an order today is, in effect, adding it directly to the
   migration target.
+- `DELETE /api/orders/:recordId?source_system=...` — removes the record
+  from wherever it lives, same per-source lookup as the other two.
 
-Both are in-memory only: there's no database, so edits and additions are
-lost on server restart, same as the rest of the mock data.
+All three are in-memory only: there's no database, so edits, additions, and
+deletions are lost on server restart, same as the rest of the mock data.
 
 ## Testing approach (not yet implemented — plan)
 

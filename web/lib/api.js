@@ -31,6 +31,18 @@ export async function updateOrderStatus(order, status) {
   return res.json();
 }
 
+export async function deleteOrder(order) {
+  const params = new URLSearchParams({ source_system: order.source_system });
+  const res = await fetch(`${API_BASE}/api/orders/${encodeURIComponent(order.record_id)}?${params}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error || `Federation API returned ${res.status}`);
+  }
+  return res.json();
+}
+
 export async function createOrder(input) {
   const res = await fetch(`${API_BASE}/api/orders`, {
     method: "POST",

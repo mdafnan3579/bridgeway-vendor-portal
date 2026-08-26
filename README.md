@@ -37,9 +37,10 @@ Runs on `http://localhost:4000`. Routes:
 - `POST /api/orders` — manually add a new order (written into the GCP mock
   source — see `docs/architecture.md`). Body: `{ storeId, territory, dcId,
   skuId, casesOrdered, netValue, status, orderDate }`
+- `DELETE /api/orders/:recordId?source_system=...` — remove an order.
 
-All mock data is in-memory only — edits and manual additions reset when the
-backend restarts.
+All mock data is in-memory only — edits, additions, and deletions reset when
+the backend restarts.
 
 ### 2. Frontend
 
@@ -55,6 +56,12 @@ Runs on `http://localhost:3000`. Reads the API base URL from
 
 Start the backend first, then the frontend, so the dashboard has data to
 fetch on first load.
+
+Dashboard features: KPI bar, a combined filter bar (date range, territory,
+DC, status, plus a client-side store/SKU search), two charts (delivery
+status breakdown and order value by territory), a sortable orders table
+with inline status editing and delete, a form to manually add an order, and
+a light/dark theme toggle (persisted per-browser).
 
 ## Notes
 

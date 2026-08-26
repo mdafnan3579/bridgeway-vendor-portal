@@ -47,7 +47,7 @@ caller's identity, so it's the single choke point where "who is asking"
 and "what they're allowed to see" can be joined once, correctly, rather
 than re-implemented per UI screen.
 
-## Write access (`PATCH`/`POST /api/orders`)
+## Write access (`PATCH`/`POST`/`DELETE /api/orders`)
 
 Same enforcement point as reads, with a narrower rule: a vendor should
 never be able to edit another store's order (or any order's status at all,

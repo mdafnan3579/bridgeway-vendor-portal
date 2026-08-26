@@ -3,10 +3,10 @@ function formatCurrency(value) {
 }
 
 function KpiTile({ label, value, tone }) {
-  const toneClass = tone === "danger" ? "text-rose-600" : "text-slate-900";
+  const toneClass = tone === "danger" ? "text-[var(--status-critical)]" : "text-[var(--ink-primary)]";
   return (
-    <div className="flex-1 min-w-[180px] rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</p>
+    <div className="flex-1 min-w-[180px] rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm">
+      <p className="text-xs font-medium uppercase tracking-wide text-[var(--ink-muted)]">{label}</p>
       <p className={`mt-1 text-2xl font-semibold ${toneClass}`}>{value}</p>
     </div>
   );

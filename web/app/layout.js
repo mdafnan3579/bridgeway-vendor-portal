@@ -16,13 +16,28 @@ export const metadata = {
   description: "Vendor Portal & Delivery Cockpit for Bridgeway Distribution",
 };
 
+// Runs before hydration so the correct theme is set before first paint —
+// otherwise a saved "dark" preference would flash light on every load.
+const THEME_INIT_SCRIPT = `
+(function () {
+  try {
+    var stored = localStorage.getItem("theme");
+    var dark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.classList.toggle("dark", dark);
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
+      <body className="min-h-full flex flex-col bg-[var(--page)] text-[var(--ink-primary)]">
         {children}
       </body>
     </html>

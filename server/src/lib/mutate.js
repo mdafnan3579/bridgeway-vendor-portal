@@ -66,3 +66,31 @@ export function addManualOrder(input) {
   gcpUnifiedOrders.push(row);
   return row;
 }
+
+// Removes an order from wherever it lives. Same per-source lookup as
+// updateOrderStatus.
+export function deleteOrder({ sourceSystem, recordId }) {
+  if (sourceSystem === "COGNOS") {
+    const orderId = Number(recordId.replace("cognos-", ""));
+    const idx = cognosOrders.findIndex((r) => r.order_id === orderId);
+    if (idx === -1) return false;
+    cognosOrders.splice(idx, 1);
+    return true;
+  }
+
+  if (sourceSystem === "FABRIC") {
+    const idx = fabricOrderEvents.findIndex((r) => r.transaction_id === recordId);
+    if (idx === -1) return false;
+    fabricOrderEvents.splice(idx, 1);
+    return true;
+  }
+
+  if (sourceSystem === "GCP") {
+    const idx = gcpUnifiedOrders.findIndex((r) => r.record_id === recordId);
+    if (idx === -1) return false;
+    gcpUnifiedOrders.splice(idx, 1);
+    return true;
+  }
+
+  return false;
+}
